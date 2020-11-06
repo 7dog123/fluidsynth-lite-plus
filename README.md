@@ -17,13 +17,13 @@ library can handle actual playback (ex. Pulseaudio or SDL2).
 
 The original README document can be found in `README.fluidsynth`.
 
-Compiling on Vita
+Compiling for PSVita
 ===========
 ```
 make -f Makefile.vita install
 ```
 
-Compiling on Switch
+Compiling for Switch
 ===========
 ```
 make -f Makefile.nx install
