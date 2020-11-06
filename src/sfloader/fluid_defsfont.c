@@ -245,6 +245,7 @@ static fluid_cached_sampledata_t *all_cached_sampledata = NULL;
 static fluid_mutex_t cached_sampledata_mutex = FLUID_MUTEX_INIT;
 #else
 static fluid_mutex_t cached_sampledata_mutex;
+static int cached_sampledata_mutex_init = 0;
 #endif
 
 static int fluid_get_file_modification_time(char *filename,
@@ -273,6 +274,13 @@ static int fluid_cached_sampledata_load(char *filename, unsigned int samplepos,
     short *loaded_sampledata = NULL;
     fluid_cached_sampledata_t *cached_sampledata = NULL;
     time_t modification_time;
+
+#ifndef FLUID_MUTEX_INIT
+    if (cached_sampledata_mutex_init == 0) {
+        cached_sampledata_mutex_init = 1;
+        fluid_mutex_init(cached_sampledata_mutex);
+    }
+#endif
 
     fluid_mutex_lock(cached_sampledata_mutex);
 
@@ -410,6 +418,13 @@ static int fluid_cached_sampledata_unload(const short *sampledata)
 {
     fluid_cached_sampledata_t *prev = NULL;
     fluid_cached_sampledata_t *cached_sampledata;
+
+#ifndef FLUID_MUTEX_INIT
+    if (cached_sampledata_mutex_init == 0) {
+        cached_sampledata_mutex_init = 1;
+        fluid_mutex_init(cached_sampledata_mutex);
+    }
+#endif
 
     fluid_mutex_lock(cached_sampledata_mutex);
     cached_sampledata = all_cached_sampledata;

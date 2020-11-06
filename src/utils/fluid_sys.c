@@ -24,6 +24,8 @@
 #include "apple/timing_mach.h"
 #elif defined(__SWITCH__)
 #include <switch.h>
+#elif defined(__vita__)
+#include <vitasdk.h>
 #endif
 
 #include "fluid_sys.h"
@@ -131,7 +133,7 @@ fluid_default_log_function(int level, char* message, void* data)
         fluid_log_config();
     }
 
-#if !defined(__SWITCH__) || defined(NXLINK_DEBUG)
+#if !defined(__SWITCH__) || defined(NXLINK_DEBUG) || DEBUG
     switch (level) {
     case FLUID_PANIC:
         FLUID_FPRINTF(out, "%s: panic: %s\n", fluid_libname, message);
@@ -345,8 +347,8 @@ fluid_is_soundfont(const char *filename)
  */
 unsigned int fluid_curtime(void)
 {
+#if defined(_WIN32)
     static long initial_seconds = 0;
-#ifdef _WIN32
     UINT64 time;
     FILETIME ft;
 
@@ -368,7 +370,14 @@ unsigned int fluid_curtime(void)
     time -= 11644473600000LL; // Milliseconds between Windows epoch (1601/01/01) and Unix
 
     return time - initial_seconds * 1000;
+#elif defined(__vita__)
+    static uint64_t initial_time = 0;
+    if (initial_time == 0) {
+        initial_time = sceKernelGetProcessTimeWide();
+    }
+    return (unsigned int)((sceKernelGetProcessTimeWide() - initial_time) / 1000);
 #else
+    static long initial_seconds = 0;
     struct timespec timeval;
 
     if (initial_seconds == 0) {
@@ -389,7 +398,7 @@ unsigned int fluid_curtime(void)
 double
 fluid_utime (void)
 {
-#ifdef _WIN32
+#if defined(_WIN32)
     FILETIME ft;
     UINT64 time;
 
@@ -401,6 +410,8 @@ fluid_utime (void)
     time -= 11644473600000000ULL; // Microseconds between Windows epoch (1601/01/01) and Unix
 
     return time / 1000000.0;
+#elif defined(__vita__)
+    return (double) sceKernelGetProcessTimeWide();
 #else
     struct timespec timeval;
 

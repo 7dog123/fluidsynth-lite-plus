@@ -94,8 +94,10 @@ extern "C" {
 #include "fluidsynth/mod.h"
 #include "fluidsynth/gen.h"
 #include "fluidsynth/voice.h"
-#ifdef __SWITCH__
+#if defined(__SWITCH__)
 #include "fluidsynth/version_switch.h"
+#elif defined(__vita__)
+#include "fluidsynth/version_vita.h"
 #else
 #include "fluidsynth/version.h"
 #endif

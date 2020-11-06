@@ -38,6 +38,10 @@
 #include "config_switch.h"
 #endif
 
+#if defined(__vita__)
+#include "config_vita.h"
+#endif
+
 #if HAVE_STRING_H
 #include <string.h>
 #endif
