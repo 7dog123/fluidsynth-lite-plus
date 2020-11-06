@@ -29,7 +29,7 @@ Compiling for Switch
 make -f Makefile.nx install
 ```
 
-Compiling on other platforms
+Compiling for other platforms
 ===========
 
 [CMake](https://cmake.org) is the only build tool that is supported -- all
