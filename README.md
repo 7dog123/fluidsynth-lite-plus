@@ -17,7 +17,19 @@ library can handle actual playback (ex. Pulseaudio or SDL2).
 
 The original README document can be found in `README.fluidsynth`.
 
-Compiling
+Compiling on Vita
+===========
+```
+make -f Makefile.vita install
+```
+
+Compiling on Switch
+===========
+```
+make -f Makefile.nx install
+```
+
+Compiling on other platforms
 ===========
 
 [CMake](https://cmake.org) is the only build tool that is supported -- all
